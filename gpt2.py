@@ -1,9 +1,17 @@
-import math
+import math, sys
 import numpy as np
+import np_replace
 
 
+#def gelu(x):
+    #return 0.5 * x * (1 + np.tanh(np.sqrt(2 / np.pi) * (x + 0.044715 * x**3)))
 def gelu(array):
-    return [gelu(x) for x in array] if isinstance(array, list) else (0.5 * array * (1 + math.tanh(math.sqrt(2 / math.pi) * (array + 0.044715 * array**3))))
+    if not isinstance(array, (int, float, list)):
+        arraytemp = array.tolist()
+    else:
+        arraytemp = array
+    return np.array([gelu(x) for x in arraytemp] if isinstance(arraytemp, list) else (0.5 * arraytemp * (1 + math.tanh(math.sqrt(2 / math.pi) * (arraytemp + 0.044715 * arraytemp**3)))))
+
 
 def softmax(x):
     exp_x = np.exp(x - np.max(x, axis=-1, keepdims=True))
@@ -18,7 +26,7 @@ def layer_norm(x, g, b, eps: float = 1e-5):
 
 
 def linear(x, w, b):  # [m, in], [in, out], [out] -> [m, out]
-    return x @ w + b
+    return np.array(np_replace.matmul(x.tolist(), np_replace.matadd(w.tolist(), b.tolist()))) #temporary casting
 
 
 def ffn(x, c_fc, c_proj):  # [n_seq, n_embd] -> [n_seq, n_embd]
@@ -119,3 +127,4 @@ if __name__ == "__main__":
     import fire
 
     fire.Fire(main)
+    #main("test")
