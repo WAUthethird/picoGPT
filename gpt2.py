@@ -1,10 +1,12 @@
 import math, sys
 import numpy as np
 import np_replace
-
+np.set_printoptions(suppress=True)
 
 #def gelu(x):
-    #return 0.5 * x * (1 + np.tanh(np.sqrt(2 / np.pi) * (x + 0.044715 * x**3)))
+#    return 0.5 * x * (1 + np.tanh(np.sqrt(2 / np.pi) * (x + 0.044715 * x**3)))
+
+
 def gelu(array):
     if not isinstance(array, (int, float, list)):
         arraytemp = array.tolist()
@@ -25,8 +27,23 @@ def layer_norm(x, g, b, eps: float = 1e-5):
     return g * x + b  # scale and offset with gamma/beta params
 
 
+#def linear(x, w, b):  # [m, in], [in, out], [out] -> [m, out]
+#    return x @ w + b
+
+
 def linear(x, w, b):  # [m, in], [in, out], [out] -> [m, out]
-    return np.array(np_replace.matmul(x.tolist(), np_replace.matadd(w.tolist(), b.tolist()))) #temporary casting
+    test = np.array(np_replace.matmul(x.tolist(), np_replace.matadd(w.tolist(), b.tolist()))) #temporary casting
+    print(w[0][0])
+    print(b[0])
+    print(w[0][0] + b[0])
+    print(np_replace.matadd(w.tolist(), b.tolist())[0][0])
+    print(x[0][0] * (w[0][0] + b[0]))
+    print(np_replace.matmul(x.tolist(), np_replace.matadd(w.tolist(), b.tolist()))[0][0])
+    print((x @ w + b)[0][0])
+    print((np.array(x.tolist()) @ np.array(w.tolist()) + np.array(b.tolist())).tolist()[0][0])
+    print(test[0][0])
+    input()
+    return test
 
 
 def ffn(x, c_fc, c_proj):  # [n_seq, n_embd] -> [n_seq, n_embd]
