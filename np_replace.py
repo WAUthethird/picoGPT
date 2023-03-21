@@ -17,12 +17,8 @@ def matadd(inputmatrix1, inputmatrix2):
 
 
 def main():
-    testmat1 = [[1, 1, 1, 5, 5], [1, 1, 1, 5, 5], [1, 2, 1, 5, 5.7], [1, 2, 3, 5, 5], [1, 2, 3, 5, 5]]
-    testmat2 = [[1, 1, 1, 5, 5], [1, 1, 1, 5, 5], [1, 2, 1, 5, 5], [1, 2, 3, 5, 5], [1, 2, 3, 5, 5]]
-    print(matadd(testmat1, testmat2))
-    print(np.array(testmat1) + np.array(testmat2))
-    print(matmul(testmat1, testmat2))
-    print(np.array(testmat1) @ np.array(testmat2))
+    testmat1 = [[1, 1, 1, 5, 5], [1, 1, 1, 5, 5], [1, 2, 1, 5, 5.7], [1, 2, 3, 5, 5]]
+    testmat2 = [[1, 1, 1, 5, 5], [1, 1, 1, 5, 5], [1, 2, 1, 5, 5], [1, 2, 3, 5, 5]]
 
 
 if __name__ == "__main__":
