@@ -16,8 +16,8 @@ def gelu(array):
 
 
 def softmax(x):
-    exp_x = np.exp(x - np.max(x, axis=-1, keepdims=True))
-    return exp_x / np.sum(exp_x, axis=-1, keepdims=True)
+    exp_x = np_replace.matexp(np_replace.matsub(x.tolist(), np_replace.matmax(x.tolist())))
+    return np.array(np_replace.matdiv(exp_x, np_replace.matsum(exp_x)))
 
 
 def layer_norm(x, g, b, eps: float = 1e-5):
