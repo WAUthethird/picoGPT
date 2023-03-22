@@ -28,6 +28,9 @@ def matsub(inputarray1, inputarray2):
     return([[inputarray1[i][f] - inputarray2[i][0] for f in range(len(inputarray1[i]))] for i in range(len(inputarray1))])
 
 def matdiv(inputarray1, inputarray2):
+    return([[inputarray1[i][f] / inputarray2[i][0] for f in range(len(inputarray1[i]))] for i in range(len(inputarray1))])
+
+def matdivx(inputarray1, inputarray2):
     return([[inputarray1[i][f] / inputarray2[i][0] for f in range(len(inputarray1[i]))] for i in range(len(inputarray1))] if len(inputarray2) > 1 else [[inputarray1[i][f] / inputarray2[0][0] for f in range(len(inputarray1[i]))] for i in range(len(inputarray1))])
 
 def matmax(inputarray):

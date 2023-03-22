@@ -19,22 +19,8 @@ def softmax(x):
 def layer_norm(x, g, b, eps: float = 1e-5):
     mean = np_replace.matmean(x.tolist())
     variance = np_replace.matvar(x.tolist())
-    """
-    print(np.sqrt(np.var(x, axis=-1, keepdims=True) + eps))
-    print(np.sqrt(np.array(variance) + eps))
-    print(math.sqrt(variance[0][0] + eps))
-    print(np.array([[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]]) / np.sqrt(np.array(variance) + eps))
-    print(np.array([[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]]) / np.array([[math.sqrt(variance[0][0] + eps)]]))
-    print((np.array(np_replace.matsub(x.tolist(), mean)) / np.array([[math.sqrt(variance[0][0] + eps)]]))[0][0] == (np.array(np_replace.matsub(x.tolist(), mean)) / np.sqrt(np.array(variance) + eps))[0][0])
-    input()
-    """
-    if (np.array(np_replace.matsub(x.tolist(), mean)) / np.array([[math.sqrt(variance[0][0] + eps)]])).all() != (np.array(np_replace.matsub(x.tolist(), mean)) / np.sqrt(np.array(variance) + eps)).all():
-        print('uh oh')
-        print(np.array(np_replace.matsub(x.tolist(), mean)) / np.array([[math.sqrt(variance[0][0] + eps)]]))
-        print(np.array(np_replace.matsub(x.tolist(), mean)) / np.sqrt(np.array(variance) + eps))
-        input()
-    x = np.array(np_replace.matsub(x.tolist(), mean)) / np.array([[math.sqrt(variance[0][0] + eps)]])  # normalize x to have mean=0 and var=1 over last axis
-    return g * x + b  # scale and offset with gamma/beta params
+    x = np_replace.matdiv(np_replace.matsub(x.tolist(), mean), [[math.sqrt(variance[0][0] + eps)]])  # normalize x to have mean=0 and var=1 over last axis
+    return np.array(np_replace.matadd(np_replace.matmul_elem(g.tolist(), x), b.tolist()))  # scale and offset with gamma/beta params
 
 
 def linear(x, w, b):  # [m, in], [in, out], [out] -> [m, out]
@@ -138,5 +124,5 @@ def main(prompt: str, n_tokens_to_generate: int = 40, model_size: str = "124M", 
 if __name__ == "__main__":
     import fire
 
-    fire.Fire(main)
-    #main("test")
+    #fire.Fire(main)
+    main("test", 3)
