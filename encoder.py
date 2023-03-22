@@ -4,12 +4,10 @@ Copied from: https://github.com/openai/gpt-2/blob/master/src/encoder.py.
 """
 import json
 import os
-from functools import lru_cache
 
 import regex as re
 
 
-@lru_cache()
 def bytes_to_unicode():
     """
     Returns list of utf-8 byte and a corresponding list of unicode strings.
