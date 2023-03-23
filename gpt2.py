@@ -12,8 +12,8 @@ def gelu(array):
 
 
 def softmax(x):
-    exp_x = np_replace.matexp(np_replace.matsub(x.tolist(), np_replace.matmax(x.tolist())))
-    return np.array(np_replace.matdiv(exp_x, np_replace.matsum(exp_x)))
+    exp_x = np_replace.matexp(np_replace.matsub(x, np_replace.matmax(x)))
+    return np_replace.matdiv(exp_x, np_replace.matsum(exp_x))
 
 
 def layer_norm(x, g, b, eps: float = 1e-5):
@@ -38,7 +38,7 @@ def ffn(x, c_fc, c_proj):  # [n_seq, n_embd] -> [n_seq, n_embd]
 
 
 def attention(q, k, v, mask):  # [n_q, d_k], [n_k, d_k], [n_k, d_v], [n_q, n_k] -> [n_q, d_v]
-    return softmax(q @ k.T / np.sqrt(q.shape[-1]) + mask) @ v
+    return np.array(np_replace.matmul(softmax(np_replace.matadd(np_replace.matdiv(np_replace.matmul(q, k.T), [[math.sqrt(len(q[0]))]]), mask.tolist())), v))
 
 
 def mha(x, c_attn, c_proj, n_head):  # [n_seq, n_embd] -> [n_seq, n_embd]

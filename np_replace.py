@@ -2,7 +2,7 @@
 NumPy Replacement Functions, written in pure Python
 Please don't use these for anything remotely serious
 """
-import numpy as np
+#import numpy as np
 import math
 
 def matmul(inputarray1, inputarray2):
@@ -49,7 +49,6 @@ def main():
     testmat1 = [[1, 1, 1, 5, 5], [1, 1, 1, 5, 5], [1, 2, 1, 5, 5.7], [1, 2, 3, 5, 5]]
     testmat2 = [[1, 1, 1, 5, 5], [1, 1, 1, 5, 5], [1, 2, 1, 5, 5], [1, 2, 3, 5, 5]]
     testmat3 = [[1, 2, 43, 4, 432], [5, 4, 2, 3, 523]]
-    print(np.var(testmat3, axis=-1, keepdims=True))
     print(matvar(testmat3))
 
 
