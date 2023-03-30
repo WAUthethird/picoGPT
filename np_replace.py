@@ -52,6 +52,9 @@ def matsplit(inputarray, indices):
 def mattranspose(inputarray):
     return([list(i) for i in zip(*inputarray)] if len(inputarray) > 1 else [[f] for f in inputarray[0]])
 
+def mattri(size):
+    return([[-0.e+00 if j <= i - 0 else -1.e+10 for j in range(size)] for i in range(size)]) # I know I'm cheesing this one by combining multiple operations - thing is, it's only used once. Lemme have this one.
+
 def main():
     testmat1 = [[1, 1, 1, 5, 5], [1, 1, 1, 5, 5], [1, 2, 1, 5, 5.7], [1, 2, 3, 5, 5]]
     testmat2 = [[1, 1, 1, 5, 5], [1, 1, 1, 5, 5], [1, 2, 1, 5, 5], [1, 2, 3, 5, 5]]
