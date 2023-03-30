@@ -2,6 +2,7 @@
 NumPy Replacement Functions, written in pure Python
 Please don't use these for anything remotely serious
 """
+
 #import numpy as np
 import math
 
@@ -45,11 +46,16 @@ def matmean(inputarray):
 def matvar(inputarray):
     return([[sum((f - (sum(i) / len(i))) ** 2 for f in i) / len(i)] for i in inputarray])
 
+def matsplit(inputarray, indices):
+    return([[[f[q:q + (len(f) // indices)] for q in range(0, len(f), (len(f) // indices))][i] for f in inputarray] for i in range(indices)])
+
+def mattranspose(inputarray):
+    return([list(i) for i in zip(*inputarray)] if len(inputarray) > 1 else [[f] for f in inputarray[0]])
+
 def main():
     testmat1 = [[1, 1, 1, 5, 5], [1, 1, 1, 5, 5], [1, 2, 1, 5, 5.7], [1, 2, 3, 5, 5]]
     testmat2 = [[1, 1, 1, 5, 5], [1, 1, 1, 5, 5], [1, 2, 1, 5, 5], [1, 2, 3, 5, 5]]
-    testmat3 = [[1, 2, 43, 4, 432], [5, 4, 2, 3, 523]]
-    print(matvar(testmat3))
+    testmat3 = [1, 2, 43, 4, 432]
 
 
 if __name__ == "__main__":
