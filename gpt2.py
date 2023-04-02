@@ -68,17 +68,17 @@ def mha(x, c_attn, c_proj, n_head):  # [n_seq, n_embd] -> [n_seq, n_embd]
 
 def transformer_block(x, mlp, attn, ln_1, ln_2, n_head):  # [n_seq, n_embd] -> [n_seq, n_embd]
     # multi-head causal self attention
-    x = x + mha(layer_norm(x, **ln_1), **attn, n_head=n_head)  # [n_seq, n_embd] -> [n_seq, n_embd]
+    x = np.array(np_replace.matadd(x.tolist(), mha(layer_norm(x, **ln_1), **attn, n_head=n_head).tolist()))  # [n_seq, n_embd] -> [n_seq, n_embd]
 
     # position-wise feed forward network
-    x = x + ffn(layer_norm(x, **ln_2), **mlp)  # [n_seq, n_embd] -> [n_seq, n_embd]
+    x = np.array(np_replace.matadd(x.tolist(), ffn(layer_norm(x, **ln_2), **mlp).tolist()))  # [n_seq, n_embd] -> [n_seq, n_embd]
 
     return x
 
 
 def gpt2(inputs, wte, wpe, blocks, ln_f, n_head):  # [n_seq] -> [n_seq, n_vocab]
     # token + positional embeddings
-    x = wte[inputs] + wpe[range(len(inputs))]  # [n_seq] -> [n_seq, n_embd]
+    x = np.array(np_replace.matadd(wte[inputs].tolist(), wpe[range(len(inputs))].tolist()))  # [n_seq] -> [n_seq, n_embd]
 
     # forward pass through n_layer transformer blocks
     for block in blocks:
@@ -86,7 +86,7 @@ def gpt2(inputs, wte, wpe, blocks, ln_f, n_head):  # [n_seq] -> [n_seq, n_vocab]
 
     # projection to vocab
     x = layer_norm(x, **ln_f)  # [n_seq, n_embd] -> [n_seq, n_embd]
-    return x @ wte.T  # [n_seq, n_embd] -> [n_seq, n_vocab]
+    return np.array(np_replace.matmul(x, np_replace.mattranspose(wte)))  # [n_seq, n_embd] -> [n_seq, n_vocab]
 
 
 def generate(inputs, params, n_head, n_tokens_to_generate):
