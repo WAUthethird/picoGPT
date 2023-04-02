@@ -3,7 +3,7 @@ NumPy Replacement Functions, written in pure Python
 Please don't use these for anything remotely serious
 """
 
-import numpy as np
+#import numpy as np
 import math
 
 def matmul(inputarray1, inputarray2):
@@ -57,6 +57,9 @@ def mattri(size):
 
 def mathstack(arrays):
     return([[elem for subarr in arrays for elem in subarr[i]] for i in range(len(arrays[0]))] if len(arrays[0]) > 1 else [[elem for arr in arrays for elem in arr[0]]])
+
+def matsqueeze(arrays):
+    return([i for i in arrays[0]] if len(arrays) == 1 else arrays)
 
 def main():
     testmat1 = [[1, 1, 1, 5, 5], [1, 1, 1, 5, 5], [1, 2, 1, 5, 5.7], [1, 2, 3, 5, 5]]
