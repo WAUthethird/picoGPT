@@ -38,7 +38,7 @@ def ffn(x, c_fc, c_proj):  # [n_seq, n_embd] -> [n_seq, n_embd]
 
 
 def attention(q, k, v, mask):  # [n_q, d_k], [n_k, d_k], [n_k, d_v], [n_q, n_k] -> [n_q, d_v]
-    return np.array(np_replace.matmul(softmax(np_replace.matadd(np_replace.matdiv(np_replace.matmul(q, np_replace.mattranspose(k)), [[math.sqrt(len(q[0]))]]), mask)), v))
+    return np_replace.matmul(softmax(np_replace.matadd(np_replace.matdiv(np_replace.matmul(q, np_replace.mattranspose(k)), [[math.sqrt(len(q[0]))]]), mask)), v)
 
 
 def mha(x, c_attn, c_proj, n_head):  # [n_seq, n_embd] -> [n_seq, n_embd]
@@ -58,7 +58,7 @@ def mha(x, c_attn, c_proj, n_head):  # [n_seq, n_embd] -> [n_seq, n_embd]
     out_heads = [attention(q, k, v, causal_mask) for q, k, v in zip(*qkv_heads)]  # [3, n_head, n_seq, n_embd/n_head] -> [n_head, n_seq, n_embd/n_head]
 
     # merge heads
-    x = np.hstack(out_heads)  # [n_head, n_seq, n_embd/n_head] -> [n_seq, n_embd]
+    x = np.array(np_replace.mathstack(out_heads))  # [n_head, n_seq, n_embd/n_head] -> [n_seq, n_embd]
 
     # out projection
     x = linear(x, **c_proj)  # [n_seq, n_embd] -> [n_seq, n_embd]
