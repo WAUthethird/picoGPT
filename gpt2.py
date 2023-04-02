@@ -1,5 +1,4 @@
 import math, sys
-import numpy as np
 import np_replace
 
 
@@ -8,7 +7,7 @@ def gelu(array):
         arraytemp = array.tolist()
     else:
         arraytemp = array
-    return np.array([gelu(x) for x in arraytemp] if isinstance(arraytemp, list) else (0.5 * arraytemp * (1 + math.tanh(math.sqrt(2 / math.pi) * (arraytemp + 0.044715 * arraytemp**3)))))
+    return [gelu(x) for x in arraytemp] if isinstance(arraytemp, list) else (0.5 * arraytemp * (1 + math.tanh(math.sqrt(2 / math.pi) * (arraytemp + 0.044715 * arraytemp**3))))
 
 
 def softmax(x):
@@ -17,14 +16,14 @@ def softmax(x):
 
 
 def layer_norm(x, g, b, eps: float = 1e-5):
-    mean = np_replace.matmean(x.tolist())
-    variance = np_replace.matvar(x.tolist())
-    x = np_replace.matdiv(np_replace.matsub(x.tolist(), mean), [[math.sqrt(i[0] + eps)] for i in variance]) # normalize x to have mean=0 and var=1 over last axis
-    return np.array(np_replace.matadd(np_replace.matmul_elem(g.tolist(), x), b))  # scale and offset with gamma/beta params
+    mean = np_replace.matmean(x)
+    variance = np_replace.matvar(x)
+    x = np_replace.matdiv(np_replace.matsub(x, mean), [[math.sqrt(i[0] + eps)] for i in variance]) # normalize x to have mean=0 and var=1 over last axis
+    return np_replace.matadd(np_replace.matmul_elem(g.tolist(), x), b)  # scale and offset with gamma/beta params
 
 
 def linear(x, w, b):  # [m, in], [in, out], [out] -> [m, out]
-    return np.array(np_replace.matadd(np_replace.matmul(x.tolist(), w.tolist()), b))
+    return np_replace.matadd(np_replace.matmul(x, w), b)
 
 
 def ffn(x, c_fc, c_proj):  # [n_seq, n_embd] -> [n_seq, n_embd]
@@ -58,7 +57,7 @@ def mha(x, c_attn, c_proj, n_head):  # [n_seq, n_embd] -> [n_seq, n_embd]
     out_heads = [attention(q, k, v, causal_mask) for q, k, v in zip(*qkv_heads)]  # [3, n_head, n_seq, n_embd/n_head] -> [n_head, n_seq, n_embd/n_head]
 
     # merge heads
-    x = np.array(np_replace.mathstack(out_heads))  # [n_head, n_seq, n_embd/n_head] -> [n_seq, n_embd]
+    x = np_replace.mathstack(out_heads)  # [n_head, n_seq, n_embd/n_head] -> [n_seq, n_embd]
 
     # out projection
     x = linear(x, **c_proj)  # [n_seq, n_embd] -> [n_seq, n_embd]
@@ -68,17 +67,17 @@ def mha(x, c_attn, c_proj, n_head):  # [n_seq, n_embd] -> [n_seq, n_embd]
 
 def transformer_block(x, mlp, attn, ln_1, ln_2, n_head):  # [n_seq, n_embd] -> [n_seq, n_embd]
     # multi-head causal self attention
-    x = np.array(np_replace.matadd(x.tolist(), mha(layer_norm(x, **ln_1), **attn, n_head=n_head).tolist()))  # [n_seq, n_embd] -> [n_seq, n_embd]
+    x = np_replace.matadd(x, mha(layer_norm(x, **ln_1), **attn, n_head=n_head))  # [n_seq, n_embd] -> [n_seq, n_embd]
 
     # position-wise feed forward network
-    x = np.array(np_replace.matadd(x.tolist(), ffn(layer_norm(x, **ln_2), **mlp).tolist()))  # [n_seq, n_embd] -> [n_seq, n_embd]
+    x = np_replace.matadd(x, ffn(layer_norm(x, **ln_2), **mlp))  # [n_seq, n_embd] -> [n_seq, n_embd]
 
     return x
 
 
 def gpt2(inputs, wte, wpe, blocks, ln_f, n_head):  # [n_seq] -> [n_seq, n_vocab]
     # token + positional embeddings
-    x = np.array(np_replace.matadd(wte[inputs].tolist(), wpe[range(len(inputs))].tolist()))  # [n_seq] -> [n_seq, n_embd]
+    x = np_replace.matadd(wte[inputs].tolist(), wpe[range(len(inputs))].tolist())  # [n_seq] -> [n_seq, n_embd]
 
     # forward pass through n_layer transformer blocks
     for block in blocks:
@@ -86,7 +85,7 @@ def gpt2(inputs, wte, wpe, blocks, ln_f, n_head):  # [n_seq] -> [n_seq, n_vocab]
 
     # projection to vocab
     x = layer_norm(x, **ln_f)  # [n_seq, n_embd] -> [n_seq, n_embd]
-    return np.array(np_replace.matmul(x, np_replace.mattranspose(wte)))  # [n_seq, n_embd] -> [n_seq, n_vocab]
+    return np_replace.matmul(x, np_replace.mattranspose(wte))  # [n_seq, n_embd] -> [n_seq, n_vocab]
 
 
 def generate(inputs, params, n_head, n_tokens_to_generate):
@@ -94,7 +93,7 @@ def generate(inputs, params, n_head, n_tokens_to_generate):
 
     for _ in tqdm(range(n_tokens_to_generate), "generating"):  # auto-regressive decode loop
         logits = gpt2(inputs, **params, n_head=n_head)  # model forward pass
-        next_id = logits[-1].tolist().index(max(logits[-1]))  # greedy sampling
+        next_id = logits[-1].index(max(logits[-1]))  # greedy sampling
         inputs.append(int(next_id))  # append prediction to input
 
     return inputs[len(inputs) - n_tokens_to_generate :]  # only return generated ids

@@ -2,7 +2,6 @@ import json
 import os
 import re
 
-import numpy as np
 import requests
 import tensorflow as tf
 from tqdm import tqdm
@@ -53,7 +52,7 @@ def load_gpt2_params_from_tf_ckpt(tf_ckpt_path, hparams):
 
     params = {"blocks": [{} for _ in range(hparams["n_layer"])]}
     for name, _ in tf.train.list_variables(tf_ckpt_path):
-        array = np.array(matsqueeze(tf.train.load_variable(tf_ckpt_path, name)))
+        array = matsqueeze(tf.train.load_variable(tf_ckpt_path, name))
         name = name[len("model/") :]
         if name.startswith("h"):
             m = re.match(r"h([0-9]+)/(.*)", name)
