@@ -10,7 +10,7 @@ You've even seen [picoGPT](https://github.com/jaymody/picoGPT)!!
 
 But you probably don't want to see [stupidGPT](https://github.com/WAUthethird/stupidGPT)...
 
-`stupidGPT` is exactly what it sounds like: a really stupid WIP partial rewrite of the (unlike this project) excellent and well-written [picoGPT](https://github.com/jaymody/picoGPT).
+`stupidGPT` is exactly what it sounds like: a really stupid partial rewrite of the (unlike this project) excellent and well-written [picoGPT](https://github.com/jaymody/picoGPT).
 What makes it so stupid?
 Well...
 
