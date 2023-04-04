@@ -15,8 +15,8 @@ What makes it so stupid?
 Well...
 
 stupidGPT "features":
-* NumPy? ❌ Nope! I'm working to rip it out completely. This project is a pure Python implementation.
-* Fast? ❌ Couldn't be further from the truth. Right now, stupidGPT takes around 1 minute per token, and I expect it to get far slower as I replace more NumPy functions with my own.
+* NumPy? ❌ Nope! I've ripped it out completely. This is a pure Python implementation.
+* Fast? ❌ Couldn't be further from the truth. Right now, stupidGPT takes around 1 minute per token with the smallest model and a relatively short prompt. With the largest model, expect 10 or more minutes per token.
 * Usable? ✅ Technically, yes! I've made sure to keep it fully functional as I replace NumPy functions with my own. But I wouldn't consider it usable in any other sense of the word.
 * Training code? ❌ Error, 4️⃣0️⃣4️⃣ not found
 * Batch inference? ❌ stupidGPT is civilized, single file line, one at a time only
