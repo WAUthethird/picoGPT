@@ -21,7 +21,7 @@ stupidGPT "features":
 * Training code? ❌ Error, 4️⃣0️⃣4️⃣ not found
 * Batch inference? ❌ stupidGPT is civilized, single file line, one at a time only
 * top-p sampling? ❌ top-k? ❌ temperature? ❌ categorical sampling?! ❌ greedy? ✅
-* Readable? ❌ No.
+* Readable? ❌ No. I've taken special care to ensure all of my NumPy replacement functions are single-line list comprehensions. (with a couple exceptions)
 * Smol??? ❌ HAHA NO
 
 
